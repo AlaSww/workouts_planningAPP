@@ -10,7 +10,7 @@ class mainPage extends StatefulWidget {
 }
 
 class _mainPageState extends State<mainPage> {
-  int selectedPage=1;
+  int selectedPage=0;
 
   void _setSelectedPage(int x){
     setState(() {

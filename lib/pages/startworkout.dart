@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:project/sqfdata/sqldb.dart';
+import 'package:project/util/audioplayer.dart';
 
 class Startworkout extends StatefulWidget {
   final String workoutName;
@@ -33,48 +34,56 @@ class _StartworkoutState extends State<Startworkout> {
         
       });}
   }
-  void showCountdownDialog(BuildContext context, int seconds) {
+  final AudioService _audioService = AudioService();
+  void showCountdownDialog(BuildContext context, int seconds,String exercise) {
   showDialog(
     context: context,
-    barrierDismissible: false, // Prevent closing by tapping outside
+    barrierDismissible: false, 
     builder: (BuildContext context) {
       int countdown = seconds;
       Timer? timer;
 
       return StatefulBuilder(
         builder: (context, setState) {
-          if (timer == null) {
-            timer = Timer.periodic(Duration(seconds: 1), (t) {
+          timer ??= Timer.periodic(Duration(seconds: 1), (t) {
               if (countdown > 0) {
                 setState(() {
                   countdown--;
                 });
               } else {
                 t.cancel();
-                Navigator.of(context).pop(); // Auto-close when timer ends
+                _audioService.playAudioFromAssets("notification.mp3");
               }
             });
-          }
-
           return AlertDialog(
             backgroundColor: const Color.fromARGB(255, 93, 0, 255),
-            title: Text(
-              "Rest Timer",
-              style: TextStyle(
-                color: Colors.white,
-              ),
-              ),
-            content: Text(
-              "Closing in $countdown seconds...",
-              style: TextStyle(
-                color: Colors.white,
-              ),
-              ),
+            title: Center(
+              child: Text(
+                "Rest Time",
+                style: TextStyle(
+                  color: Colors.white,
+                ),
+                ),
+            ),
+            content: Padding(
+              padding: const EdgeInsets.only(left: 90),
+              child: Text(
+                "${countdown~/60}:${countdown%60}",
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 25,
+                  fontWeight: FontWeight.bold,
+                ),
+                ),
+            ),
             actions: [
               TextButton(
                 onPressed: () {
-                  timer?.cancel(); // Stop the timer
-                  Navigator.of(context).pop(); // Close the dialog
+                  _audioService.stopAudio();
+                  _audioService.dispose();
+                  timer?.cancel();
+                  Navigator.of(context).pop();
+                  updateSet(exercise);
                 },
                 child: Text(
                   "Close Now",
@@ -96,30 +105,10 @@ class _StartworkoutState extends State<Startworkout> {
       if (exercisesets[exercise]!['left']! > 0) {
         exercisesets[exercise]!['done'] = exercisesets[exercise]!['done']! + 1;
         exercisesets[exercise]!['left'] = exercisesets[exercise]!['left']! - 1;
-        Timer(Duration(seconds: exercices[count]['rest']), () {
-          showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return AlertDialog(
-              title: Text('Set Finished'),
-              content: Text('Time to start the next set'),
-              actions: <Widget>[
-                TextButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: Text('OK'),
-                ),
-              ],
-            );
-          },
-        );
-        });
       }
       if (exercisesets[exercise]!['left']! == 0) {
         if (count<exercices.length-1){
           count++;
-        }
         showDialog(
           context: context,
           builder: (BuildContext context) {
@@ -136,7 +125,27 @@ class _StartworkoutState extends State<Startworkout> {
               ],
             );
           },
+        );}
+        else{
+          showDialog(
+            barrierDismissible: false,
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text('Workout Finished'),
+              actions: <Widget>[
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                    Navigator.of(context).pushNamed('mainpage');
+                  },
+                  child: Text('OK'),
+                ),
+              ],
+            );
+          },
         );
+        }
       }
     });
   }
@@ -146,7 +155,6 @@ class _StartworkoutState extends State<Startworkout> {
     count=0;
     getExercices();
     super.initState();
-    // Fetch exercises or initialize data here
   }
 
   @override
@@ -191,8 +199,7 @@ class _StartworkoutState extends State<Startworkout> {
             ),
             InkWell(
               onTap: () {
-                updateSet(exercices[count]['name']);
-                showCountdownDialog(context,30);
+                  showCountdownDialog(context,exercices[count]['rest'],exercices[count]['name']);
               },
               borderRadius: BorderRadius.circular(screenWidth * 0.15),
               child: CircleAvatar(
