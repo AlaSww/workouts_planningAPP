@@ -31,6 +31,10 @@ class _WorkoutviewState extends State<Workoutview> {
     return Scaffold(
       backgroundColor:  const Color.fromARGB(255, 220, 198, 255),
       appBar: AppBar(
+        leading: IconButton(
+          onPressed: (){Navigator.of(context).pushNamed('mainpage');}, 
+          icon: Icon(Icons.arrow_back),
+          ),
         title: Center(
           child: Text(
             widget.workoutName,

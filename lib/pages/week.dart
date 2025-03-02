@@ -15,7 +15,7 @@ class _weekPageState extends State<weekPage> {
     'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'
   ];
   Sqldb sqldb=Sqldb();
-  List workouts=[];
+  List workouts=["Rest"];
   void getWorkouts() async{
     List<Map> response= await sqldb.readData("select * from workouts");
     for(int i=0;i<response.length;i++){
@@ -37,12 +37,28 @@ class _weekPageState extends State<weekPage> {
       String selectedWorkout = plan.get(day, defaultValue: 'Rest');
 
       return AlertDialog(
-        title: Text("Select Workout for $day"),
+        backgroundColor: Colors.deepPurple,
+        title: Center(child: Text(
+          "Select Workout for $day",
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 22,
+            fontWeight: FontWeight.bold,
+          ),
+          )),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: workouts.map((workout) {
             return RadioListTile(
-              title: Text(workout),
+              title: Text(
+                workout,
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 22,
+                  fontWeight: FontWeight.bold,
+                ),
+                
+                ),
               value: workout,
               groupValue: selectedWorkout,
               onChanged: (value) {
@@ -81,7 +97,7 @@ class _weekPageState extends State<weekPage> {
             child: Row(
               children: [
                 Text(
-                  "${Days[index]}: ${plan.get(Days[index])}",
+                  "${Days[index]}: ${getWorkout(Days[index])}",
                   style: TextStyle(
                   color: const Color.fromARGB(255, 255, 255, 255),
                   fontWeight: FontWeight.bold,

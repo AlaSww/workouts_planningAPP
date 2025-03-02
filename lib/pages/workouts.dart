@@ -63,6 +63,7 @@ class _workoutsPgeState extends State<workoutsPge> {
                       trailing: IconButton(
                         onPressed: ()async{
                           int response = await sqldb.deleteData("delete from workouts where name= '${workouts[index]['name']}'");
+                          int response2=await sqldb.deleteData("delete from exercices where workout=='${workouts[index]['name']}'");
                           if(response>0){
                             workouts.removeWhere((item)=> item['name'] == workouts[index]['name']);
                             setState(() {

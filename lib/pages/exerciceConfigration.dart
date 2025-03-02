@@ -21,7 +21,10 @@ class _ExerciceconfigrationState extends State<Exerciceconfigration> {
   int work=30;
   @override
   Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
+      resizeToAvoidBottomInset : false,
       backgroundColor: const Color.fromARGB(255, 220, 198, 255),
       floatingActionButton: IconButton.filled(
         onPressed: ()async{
@@ -52,9 +55,9 @@ class _ExerciceconfigrationState extends State<Exerciceconfigration> {
       body: Center(
         child: Column(
           children: [
-            Container(height: 20, color: const Color.fromARGB(255, 220, 198, 255),),
+            SizedBox(height: screenHeight * 0.02),
             Container(
-              width: 200,
+              width: screenWidth * 0.8,
               decoration:BoxDecoration(
                 color: const Color.fromARGB(255, 255, 255, 255),
                 borderRadius: BorderRadius.circular(10),
@@ -63,15 +66,20 @@ class _ExerciceconfigrationState extends State<Exerciceconfigration> {
                 controller: name,
                 decoration: InputDecoration(
                   hintText: "exercice name...",
+                  border: InputBorder.none,
+                    contentPadding: EdgeInsets.symmetric(
+                      horizontal: screenWidth * 0.05, // 5% of screen width
+                      vertical: screenHeight * 0.02, // 2% of screen height
+                    ),
                 ),
               ),
             ),
-            Container(height: 50,),
+            SizedBox(height: screenHeight * 0.05),
             Text(
               "Reps: $reps",
               style: TextStyle(
                 color: Colors.deepPurple,
-                fontSize: 16,
+                fontSize: screenWidth * 0.05,
                 fontWeight: FontWeight.bold,
               ),
 
@@ -90,7 +98,7 @@ class _ExerciceconfigrationState extends State<Exerciceconfigration> {
               "Sets: $sets",
               style: TextStyle(
                 color: Colors.deepPurple,
-                fontSize: 16,
+                fontSize: screenWidth * 0.05,
                 fontWeight: FontWeight.bold,
               ),
 
@@ -109,7 +117,7 @@ class _ExerciceconfigrationState extends State<Exerciceconfigration> {
               "Work time: ${work~/60}:${work%60}",
               style: TextStyle(
                 color: Colors.deepPurple,
-                fontSize: 16,
+                fontSize: screenWidth * 0.05,
                 fontWeight: FontWeight.bold,
               ),
 
@@ -128,7 +136,7 @@ class _ExerciceconfigrationState extends State<Exerciceconfigration> {
               "Rest time: ${rest~/60}:${rest%60}",
               style: TextStyle(
                 color: Colors.deepPurple,
-                fontSize: 16,
+                fontSize: screenWidth * 0.05,
                 fontWeight: FontWeight.bold,
               ),
 

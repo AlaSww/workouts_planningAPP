@@ -1,6 +1,8 @@
+import 'package:android_alarm_manager/android_alarm_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:project/pages/exerciceConfigration.dart';
+import 'package:project/pages/homepage.dart';
 import 'package:project/pages/mainPage.dart';
 import 'package:project/pages/week.dart';
 import 'package:project/pages/workoutConfigration.dart';
@@ -14,6 +16,7 @@ Future main() async {
   await Hive.initFlutter();
   var box=Hive.openBox('plan');
   sqfliteFfiInit();
+  await AndroidAlarmManager.initialize();
   runApp(MyApp());
 }
 
@@ -25,6 +28,7 @@ class MyApp extends StatelessWidget{
       home: mainPage(),
       routes: {
         'workouts': (context) => workoutsPge(),
+        'homepage':(context)=>homepage(),
         'mainpage': (context) =>mainPage(),
         'weekplan':(context) => weekPage(),
         'addworkout':(context)=> Workoutconfigration(workoutName: '',),
