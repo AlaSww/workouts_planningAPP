@@ -43,6 +43,7 @@ dependencies:
   flutter_local_notifications: ^18.0.1
   just_audio: ^0.9.46
   audioplayers: ^6.2.0
+  url_launcher: ^6.1.11
 
 dev_dependencies:
   flutter_test:

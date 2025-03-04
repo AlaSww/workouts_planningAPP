@@ -80,7 +80,6 @@ class _StartworkoutState extends State<Startworkout> {
               TextButton(
                 onPressed: () {
                   _audioService.stopAudio();
-                  _audioService.dispose();
                   timer?.cancel();
                   Navigator.of(context).pop();
                   updateSet(exercise);

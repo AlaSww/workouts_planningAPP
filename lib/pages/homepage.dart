@@ -46,7 +46,7 @@ class _homepageState extends State<homepage> {
       body: Center(
         child: Column(
           children: [
-            Container(height: 230,),
+            Container(height: 100,),
           Container(
             height: 350,
             width: 350,
